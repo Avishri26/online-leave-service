@@ -1,0 +1,158 @@
+from tkinter import *
+from tkinter.messagebox import showinfo
+from tkinter import font
+from tkinter.filedialog import *
+import os
+from PIL import Image,ImageTk
+def About():
+    messagebox.showinfo("Notepad","Notepad is a generic text editor\n included with all versions of \nMicrosoft Windows that allows\n you to create, open, and read plaintext files.")
+def Help():
+    messagebox.showinfo("Help","We will definately help You")
+def Open():
+    file = askopenfilename(defaultextension=".txt",filetypes=[("All Files", "*.*"),("Text Documents", "*.txt")])
+    if file == "":
+        # no file to open
+        file = None
+    else:
+        # try to open the file
+        # set the window title
+        win.title(os.path.basename(file) + " - Notepad")
+        TextArea.delete(1.0, END)
+        file = open(file, "r+")
+        TextArea.insert(1.0, file.read())
+        file.close()
+def New():
+    global file
+    win.title("untitled-Notepad")
+    file=None
+    TextArea.delete(1.0,END)
+def Save():
+    file=asksaveasfilename()
+    if file == None:
+        # save as new file
+        file = asksaveasfilename(initialfile='Untitled.txt', defaultextension=".txt",filetypes=[("All Files", "*.*"),("Text Documents", "*.txt")])
+        if file == "":
+            file = None
+        else:
+            # try to save the file
+            file = open(file, "w")
+            file.write(TextArea.get(1.0, END))
+            file.close()
+            # change the window title
+            win.title(os.path.basename(file) + " - Notepad")
+    else:
+        file = open(file, "w")
+        file.write(TextArea.get(1.0, END))
+        file.close()
+def Myfont():
+    myFont = font.Font(family='Helvetica')
+def Save_As():
+    global file
+    if file == None:
+        file = asksaveasfilename(initialfile="untitled.txt", defaultextension=".txt",filetypes=[("All Files", "*.*"), ("Text Documents", "*.txt")])
+        if file == "":
+            file = None
+        else:
+            f = open(file, "w")
+            f.write(TextArea.get(1.0, END))
+            f.close()
+            win.title(os.path.basename(file) + "-Notepad")
+def Scll():
+    statusbar = StringVar()
+    if var.get()==1:
+        statusbar.set(f"words:{str(len(TextArea.get(1.0,END))-1)}")
+        Sbar=Label(win,textvariable=statusbar,relief=SUNKEN,anchor='w')
+        Sbar.pack(side=BOTTOM,fill=X)
+
+def hello():
+    print("hello")
+#Cut func
+def CUT():
+    TextArea.event_generate(("<<Cut>>"))
+#paste func
+def PASTE():
+    TextArea.event_generate(("<<Paste>>"))
+#copy function
+def COPY():
+    TextArea.event_generate(("<<Copy>>"))
+#Delete function
+def DELETE():
+    TextArea.delete(1.0,END)
+# Exit action
+def _quit():
+    win.quit()
+    win.destroy()
+    exit()
+if __name__=="__main__":
+    win = Tk()
+    win.title("Python GUI App")
+    win.geometry("600x600")
+    win.minsize(300,300)
+    win.maxsize(1000,1000)
+    win.wm_iconbitmap("1.ico")
+    # Create Menu Bar
+    menuBar = Menu(win)
+    win.config(menu=menuBar)
+    # File Menu
+    fileMenu = Menu(menuBar, tearoff=0)
+    fileMenu.add_command(label="New   ctrl+N", command=New)
+    fileMenu.add_command(label="Open  ctrl+O", command=Open)
+    fileMenu.add_command(label="Save  ctrl+S", command=Save)
+    fileMenu.add_command(label="Save  As..  ", command=Save_As)
+    fileMenu.add_separator()
+    fileMenu.add_command(label="Page   Setup", command=hello)
+    fileMenu.add_command(label="Print ctrl+P", command=hello)
+    fileMenu.add_separator()
+    fileMenu.add_command(label="Exit", command=_quit)
+    menuBar.add_cascade(label="File", menu=fileMenu)
+
+    # Edit Menu
+    editMenu = Menu(menuBar, tearoff=0)
+    editMenu.add_command(label="Undo   ctrl+Z", command=hello)
+    editMenu.add_separator()
+    editMenu.add_command(label="Cut    ctrl+X", command=CUT)
+    editMenu.add_command(label="Copy   ctrl+C", command=COPY)
+    editMenu.add_command(label="Paste  ctrl+V", command=PASTE)
+    editMenu.add_command(label="Delete    Del", command=DELETE)
+    editMenu.add_separator()
+    editMenu.add_command(label="Find   ctrl+F", command=hello)
+    editMenu.add_command(label="Find Next  F3", command=hello)
+    editMenu.add_command(label="Replace ctrl+H", command=hello)
+    editMenu.add_command(label="Go To   ctrl+G", command=hello)
+    editMenu.add_separator()
+    editMenu.add_command(label="Select All ctrl+A", command=hello)
+    editMenu.add_command(label=" Time/Date  F5", command=hello)
+    menuBar.add_cascade(label="Edit", menu=editMenu)
+
+    #Format Menu
+    FormatMenu = Menu(menuBar, tearoff=0)
+    FormatMenu.add_checkbutton(label="Word Wrap  ", command=hello)
+    FormatMenu.add_command(label="Font ..    ", command=Myfont)
+    menuBar.add_cascade(label="Format", menu=FormatMenu)
+
+    #View menu
+    ViewMenu = Menu(menuBar, tearoff=0)
+    var=IntVar()
+    var.set(0)
+    ViewMenu.add_checkbutton(label="status Bar", variable=var,command=Scll)
+    menuBar.add_cascade(label="View", menu=ViewMenu)
+    # Help Menu
+    helpMenu = Menu(menuBar, tearoff=0)
+    helpMenu.add_command(label="Help",command=Help)
+    helpMenu.add_command(label="About Notepad",command=About)
+    menuBar.add_cascade(label="Help", menu=helpMenu)
+
+    #Text Editor
+    TextArea = Text(win, font="Lucida 13", wrap=WORD)
+    TextArea.insert(END,"")
+    TextArea.configure(font=("Arial",12))
+    #ScrollBar
+    Scroll_bar=Scrollbar(win,orient=VERTICAL)
+    Scroll_bar.config(command=TextArea.yview)
+    TextArea.configure(yscrollcommand=Scroll_bar.set)
+    Scroll_bar.pack(side=RIGHT,fill=Y)
+    TextArea.pack(expand=True, fill=BOTH)
+    # Calling Main()
+    win.mainloop()
+
+
