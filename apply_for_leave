@@ -1,0 +1,51 @@
+<html>
+<head>
+<link rel = "stylesheet" type = "text/css" href = "welcome.css">
+<link href="https://fonts.googleapis.com/css?family=Open+Sans|Source+Sans+Pro" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Lora:400,700|Montserrat:300" rel="stylesheet">
+<title></title>
+</head>
+<body>
+
+<header class="img">
+
+<img src = "4.png" height = 100px align =left>
+<h1>Online Leave Management System</h1>
+</header>
+
+<nav>
+<ul>
+<li><a href="welcome.php">Dashboard</a></li>
+  <li><a href="update_profile.php" >Update Profile</a></li>
+  <li><a href="change_password.html">Change Password</a></li>
+  <li><a href="apply_for_leave.html"class="active">Apply for leave</a></li>
+  <li><a href="leave_history.php">Leave history</a></li>
+  <li><a href="logout.php">Logout</a></li>
+</ul>
+</nav>
+
+<div class="pageapply"> 
+<center><h1>Apply For Leave</h1>
+<hr style = "width:80%;">
+
+<form method ="POST" action = "apply_for_leave.php">
+ Start Date : <input type = "date" name = "start_date" required>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+ End Date : <input type = "date" name = "end_date" required><br><br>
+ Leave type : <select class="leave" name = "leave_type" required>
+		<option >Select an Option</option>
+		<option value = "Casual"><center>Casual</center></option>
+		<option value = "Medical">Medical</option>
+		<option value = "Vacation">Vacation</option>
+		<option value = "Funeral">Funeral</option>
+		<option value = "Earn leave">Earn leave</option>
+		<option value = "Custom">Custom</option>
+		</select>
+		<br><br>
+<textarea name = "description" style = " font-size:16px" rows="5" cols="100" placeholder="Description">
+</textarea><br><br>
+<button class="apply">Apply</button>
+</form></center>
+</div>
+
+</body>
+</html>
